@@ -17,18 +17,7 @@
 
 package crawlercommons.sitemaps;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Date;
-import java.util.zip.GZIPInputStream;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import crawlercommons.sitemaps.AbstractSiteMap.SitemapType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -37,7 +26,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import crawlercommons.sitemaps.AbstractSiteMap.SitemapType;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.util.zip.GZIPInputStream;
 
 
 
@@ -537,7 +531,7 @@ public class SiteMapParser {
      * Both URLs are first converted to lowercase before the comparison is made
      * (this could be an issue on web servers that are case sensitive).
      * 
-     * @param sitemapUrl
+     * @param sitemapBaseUrl
      * @param testUrl
      * @return true if testUrl is under sitemapUrl, false otherwise
      */
@@ -548,6 +542,7 @@ public class SiteMapParser {
         // Don't try a comparison if the URL is too short to match
         if (sitemapBaseUrl != null && sitemapBaseUrl.length() <= testUrl.length()) {
             String u = testUrl.substring(0, sitemapBaseUrl.length()).toLowerCase();
+            u = u.replaceFirst("www", "partner");
             ret = sitemapBaseUrl.equals(u);
         }
 
